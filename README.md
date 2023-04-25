@@ -12,7 +12,7 @@
 
 ## 📋 Descrição do Projeto
 
-Projeto criado durante um evento da [escola online de tecnologia Alura](https://www.alura.com.br/) onde todos os alunos receberam um conjunto de informações via [Trello](https://trello.com/b/pvyoHDfT/challenge-backend-6) e instruções via lives ao vivo e videos gravados para criarem uma API REST para o projeto Adopet que atendesse as necessidades do seguinte layout disponibilizadopelo Figma:
+Projeto criado durante um evento da [escola online de tecnologia Alura](https://www.alura.com.br/) onde todos os alunos receberam um conjunto de informações via [Trello](https://trello.com) e instruções via lives ao vivo e videos gravados para criarem uma API REST para o projeto Adopet que atendesse as necessidades do seguinte layout disponibilizadopelo Figma:
 
 ![img_1.png](img_1.png)
 ![img_2.png](img_2.png)
