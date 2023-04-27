@@ -1,6 +1,6 @@
-package domain.tutor;
+package br.com.alura.adopet.domain.tutor.dto;
 
-import br.com.alura.adopet.domain.tutor.Tutor;
+import br.com.alura.adopet.domain.tutor.entidade.Tutor;
 
 public record DadosListarTutores(Long id, String nome, String email, String urlFoto, String telefone, String cidade,
                                  String sobre) {

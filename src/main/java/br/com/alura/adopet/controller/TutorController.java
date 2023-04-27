@@ -1,9 +1,9 @@
 package br.com.alura.adopet.controller;
 
-import br.com.alura.adopet.domain.tutor.*;
-import br.com.alura.adopet.domain.tutor.validacao.ValidacaoException;
-import domain.tutor.DadosAlterarTutor;
-import domain.tutor.DadosListarTutores;
+import br.com.alura.adopet.domain.tutor.dto.*;
+import br.com.alura.adopet.domain.tutor.entidade.Tutor;
+import br.com.alura.adopet.domain.tutor.repositorio.TutorRepository;
+import br.com.alura.adopet.infra.exception.DadosErroValidacao;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,9 +25,9 @@ public class TutorController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<DadosTutorCriado> cadastrarTutor(@RequestBody @Valid DadosCadastrarTutor dados, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<?> cadastrarTutor(@RequestBody @Valid DadosCadastrarTutor dados, UriComponentsBuilder uriBuilder) {
         if (tutorRepository.existsByEmail(dados.email())) {
-            throw new ValidacaoException("E-mail já cadastrado no banco de dados.");
+            return ResponseEntity.badRequest().body(new DadosErroValidacao("email", "E-mail já cadastrado."));
         } else {
             Tutor tutor = tutorRepository.save(new Tutor(dados));
             URI uri = uriBuilder.path("tutor/{idTutor}").buildAndExpand(tutor.getId()).toUri();
@@ -36,20 +36,20 @@ public class TutorController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListarTutores>> listarTodos(Pageable pageable){
+    public ResponseEntity<?> listarTodos(Pageable pageable) {
         Page<DadosListarTutores> page = tutorRepository.findAll(pageable).map(DadosListarTutores::new);
-        if(page.isEmpty()){
-            throw new ValidacaoException("Nenhum tutor encontrado.");
+        if (page.isEmpty()) {
+            return ResponseEntity.ok().body(new MensagemRetorno("Nenhum tutor encontrado."));
         } else {
             return ResponseEntity.ok().body(page);
         }
     }
 
     @GetMapping("/{idTutor}")
-    public ResponseEntity<DadosDetalharTutor> detalharTutor(@PathVariable Long idTutor) {
+    public ResponseEntity<?> detalharTutor(@PathVariable Long idTutor) {
         Optional<Tutor> optionalTutor = tutorRepository.findById(idTutor);
         if (optionalTutor.isEmpty()) {
-            throw new ValidacaoException("Tutor não encontrado.");
+            return ResponseEntity.badRequest().body(new DadosErroValidacao("id", "Tutor não encontrado."));
         } else {
             Tutor tutor = optionalTutor.get();
             return ResponseEntity.ok().body(new DadosDetalharTutor(tutor));
@@ -58,20 +58,20 @@ public class TutorController {
 
     @PutMapping("/{idTutor}")
     @Transactional
-    public ResponseEntity<DadosDetalharTutor> alterarTutorPut(@PathVariable Long idTutor, @RequestBody DadosAlterarTutor dados) {
+    public ResponseEntity<?> alterarTutorPut(@PathVariable Long idTutor, @RequestBody DadosAlterarTutor dados) {
         return putOuPatch(idTutor, dados);
     }
 
     @PatchMapping("/{idTutor}")
     @Transactional
-    public ResponseEntity<DadosDetalharTutor> alterarTutorPatch(@PathVariable Long idTutor, @RequestBody DadosAlterarTutor dados) {
+    public ResponseEntity<?> alterarTutorPatch(@PathVariable Long idTutor, @RequestBody DadosAlterarTutor dados) {
         return putOuPatch(idTutor, dados);
     }
 
-    private ResponseEntity<DadosDetalharTutor> putOuPatch(Long idTutor, DadosAlterarTutor dados) {
+    private ResponseEntity<?> putOuPatch(Long idTutor, DadosAlterarTutor dados) {
         Optional<Tutor> optionalTutor = tutorRepository.findById(idTutor);
         if (optionalTutor.isEmpty()) {
-            throw new ValidacaoException("Tutor não encontrado");
+            return ResponseEntity.badRequest().body(new DadosErroValidacao("id", "Tutor não encontrado"));
         } else {
             Tutor tutor = optionalTutor.get();
             tutor.alterar(dados);
@@ -81,7 +81,11 @@ public class TutorController {
 
     @DeleteMapping("{idTutor}")
     @Transactional
-    public ResponseEntity<String> deletar(@PathVariable Long idTutor){
+    public ResponseEntity<?> deletar(@PathVariable Long idTutor) {
+        Optional<Tutor> optionalTutor = tutorRepository.findById(idTutor);
+        if (optionalTutor.isEmpty()) {
+            return ResponseEntity.badRequest().body(new DadosErroValidacao("id", "Tutor não encontrado"));
+        }
         tutorRepository.deleteById(idTutor);
         return ResponseEntity.ok().build();
     }

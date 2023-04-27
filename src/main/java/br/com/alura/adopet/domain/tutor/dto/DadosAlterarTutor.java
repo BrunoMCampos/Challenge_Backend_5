@@ -1,4 +1,4 @@
-package domain.tutor;
+package br.com.alura.adopet.domain.tutor.dto;
 
 public record DadosAlterarTutor(
         String nome,

@@ -1,13 +1,14 @@
-package br.com.alura.adopet.domain.tutor;
+package br.com.alura.adopet.domain.tutor.entidade;
 
-import domain.tutor.DadosAlterarTutor;
+import br.com.alura.adopet.domain.tutor.dto.DadosAlterarTutor;
+import br.com.alura.adopet.domain.tutor.dto.DadosCadastrarTutor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Entity(name = "Tutor")
 @Table(name = "tutor")
 @Getter
 @AllArgsConstructor

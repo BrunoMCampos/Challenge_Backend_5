@@ -1,4 +1,6 @@
-package br.com.alura.adopet.domain.tutor;
+package br.com.alura.adopet.domain.tutor.dto;
+
+import br.com.alura.adopet.domain.tutor.entidade.Tutor;
 
 public record DadosDetalharTutor(
         String urlFoto,
